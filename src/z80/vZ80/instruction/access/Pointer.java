@@ -1,25 +1,25 @@
 package vZ80.instruction.access;
 
-import vZ80.RegisterFile;
+import vZ80.Memory;
 import vZ80.VirtualMachine;
 
-public class C implements I8bitAccessor
+public class Pointer implements I8bitAccessor, I16bitAccessor
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
 	//----------------------------------------------------------
-
+	private int addr;
+	
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
+	public Pointer( int addr )
 	{
-		
+		this.addr = addr;
 	}
 
 	//----------------------------------------------------------
@@ -28,15 +28,33 @@ public class C implements I8bitAccessor
 	@Override
 	public void set8( VirtualMachine vm, int data )
 	{
-		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
+		Memory ram = vm.getRam();
+		
+		ram.write8( addr, data );
 	}
 
 	@Override
 	public int get8( VirtualMachine vm )
 	{
-		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		Memory ram = vm.getRam();
+		
+		return ram.read8( addr );
+	}
+	
+	@Override
+	public void set16( VirtualMachine vm, int data )
+	{
+		Memory ram = vm.getRam();
+		
+		ram.write16( addr, data );
+	}
+
+	@Override
+	public int get16( VirtualMachine vm )
+	{
+		Memory ram = vm.getRam();
+		
+		return ram.read16( addr );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,42 +1,48 @@
-package vZ80.instruction.access;
+package vZ80.instruction.load;
 
-import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
+import vZ80.instruction.IInstruction;
+import vZ80.instruction.access.I8bitAccessor;
 
-public class C implements I8bitAccessor
+public class Load8bit implements IInstruction
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
 	//----------------------------------------------------------
-
+	private I8bitAccessor dst;
+	private I8bitAccessor src;
+	private int srcValue;
+	
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
+	public Load8bit( I8bitAccessor dst, int value )
 	{
-		
+		this.dst = dst;
+		this.src = null;
+		this.srcValue = value;
 	}
+	
+	public Load8bit( I8bitAccessor dst, I8bitAccessor src )
+	{
+		this.dst = dst;
+		this.src = src;
+		this.srcValue = -1;
+	}
+	
 
 	//----------------------------------------------------------
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
 	@Override
-	public void set8( VirtualMachine vm, int data )
+	public void execute( VirtualMachine vm )
 	{
-		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
-	}
-
-	@Override
-	public int get8( VirtualMachine vm )
-	{
-		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		int value = src == null ? this.srcValue : src.get8( vm );
+		this.dst.set8( vm, value );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,42 +1,48 @@
-package vZ80.instruction.access;
+package vZ80.instruction.load;
 
-import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
+import vZ80.instruction.IInstruction;
+import vZ80.instruction.access.I16bitAccessor;
 
-public class C implements I8bitAccessor
+public class Load16bit implements IInstruction
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
 	//----------------------------------------------------------
-
+	private I16bitAccessor dst;
+	private I16bitAccessor src;
+	private int srcValue;
+	
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
+	public Load16bit( I16bitAccessor dst, int value )
 	{
-		
+		this.dst = dst;
+		this.src = null;
+		this.srcValue = value;
 	}
+	
+	public Load16bit( I16bitAccessor dst, I16bitAccessor src )
+	{
+		this.dst = dst;
+		this.src = src;
+		this.srcValue = -1;
+	}
+	
 
 	//----------------------------------------------------------
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
 	@Override
-	public void set8( VirtualMachine vm, int data )
+	public void execute( VirtualMachine vm )
 	{
-		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
-	}
-
-	@Override
-	public int get8( VirtualMachine vm )
-	{
-		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		int value = src == null ? this.srcValue : this.src.get16( vm );
+		this.dst.set16( vm, value );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

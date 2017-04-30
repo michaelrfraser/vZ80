@@ -1,14 +1,21 @@
-package vZ80.instruction.access;
+package vZ80.instruction.load;
 
+import org.junit.Assert;
+import org.junit.Test;
+
+import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
+import vZ80.instruction.IInstruction;
+import vZ80.instruction.access.A;
+import vZ80.instruction.access.BCPointer;
+import vZ80.instruction.load.Load8bit;
 
-public class C implements I8bitAccessor
+public class LoadBCPointerTest
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
@@ -17,26 +24,29 @@ public class C implements I8bitAccessor
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
-	{
-		
-	}
 
 	//----------------------------------------------------------
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
-	@Override
-	public void set8( VirtualMachine vm, int data )
+	@Test
+	public void testLoadBCPointer_A()
 	{
+		VirtualMachine vm = new VirtualMachine();
+		Memory ram = vm.getRam();
 		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
-	}
-
-	@Override
-	public int get8( VirtualMachine vm )
-	{
-		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		
+		// Load an initial value into the source
+		reg.setA( 0xF0 );
+		
+		// Point BC to the memory address to load into
+		reg.setBC( 0x0FF0 );
+		
+		// Create and execute the load instruction
+		IInstruction load = new Load8bit( BCPointer.instance, A.instance );
+		load.execute( vm );
+		
+		// The destination should now contain the source
+		Assert.assertEquals( 0xF0, ram.read8(0x0FF0) );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

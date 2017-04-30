@@ -1,14 +1,15 @@
 package vZ80.instruction.access;
 
+import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
 
-public class C implements I8bitAccessor
+public class SPPointer implements I16bitAccessor
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
+	public static SPPointer instance = new SPPointer();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
@@ -17,7 +18,7 @@ public class C implements I8bitAccessor
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
+	private SPPointer()
 	{
 		
 	}
@@ -26,17 +27,23 @@ public class C implements I8bitAccessor
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
 	@Override
-	public void set8( VirtualMachine vm, int data )
+	public void set16( VirtualMachine vm, int data )
 	{
 		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
+		Memory ram = vm.getRam();
+		int address = reg.getSP();
+		
+		ram.write16( address, data );
 	}
 
 	@Override
-	public int get8( VirtualMachine vm )
+	public int get16( VirtualMachine vm )
 	{
 		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		Memory ram = vm.getRam();
+		int address = reg.getSP();
+		
+		return ram.read16( address );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

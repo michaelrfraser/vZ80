@@ -12,7 +12,7 @@ public class VirtualMachine
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
 	//----------------------------------------------------------
-	private Registers registers;
+	private RegisterFile registers;
 	private InstructionDecoder decoder;
 	private Memory ram;
 	
@@ -22,7 +22,7 @@ public class VirtualMachine
 	public VirtualMachine()
 	{
 		this.ram = new Memory();
-		this.registers = new Registers();
+		this.registers = new RegisterFile();
 		this.decoder = new InstructionDecoder( this );
 	}
 
@@ -35,7 +35,7 @@ public class VirtualMachine
 		nextInstruction.execute( this );
 	}
 
-	public Registers getRegisters()
+	public RegisterFile getRegisters()
 	{
 		return this.registers;
 	}

@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import vZ80.Registers;
+import vZ80.RegisterFile;
 
 public class RegisterTest
 {
@@ -40,7 +40,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetA()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setA( 0x00 );
 		Assert.assertEquals( 0x00, reg.getA() );
@@ -58,7 +58,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetF()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setF( 0x00 );
 		Assert.assertEquals( 0x00, reg.getF() );
@@ -76,7 +76,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetAF()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setAF( 0 );
 		Assert.assertEquals( 0, reg.getAF() );
@@ -113,7 +113,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetB()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setB( 0x00 );
 		Assert.assertEquals( 0x00, reg.getB() );
@@ -131,7 +131,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetC()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setC( 0x00 );
 		Assert.assertEquals( 0x00, reg.getC() );
@@ -149,7 +149,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetBC()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setBC( 0 );
 		Assert.assertEquals( 0, reg.getBC() );
@@ -186,7 +186,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetD()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setD( 0x00 );
 		Assert.assertEquals( 0x00, reg.getD() );
@@ -204,7 +204,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetE()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setE( 0x00 );
 		Assert.assertEquals( 0x00, reg.getE() );
@@ -222,7 +222,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetDE()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setDE( 0 );
 		Assert.assertEquals( 0, reg.getDE() );
@@ -259,7 +259,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetH()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setH( 0x00 );
 		Assert.assertEquals( 0x00, reg.getH() );
@@ -277,7 +277,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetL()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setL( 0x00 );
 		Assert.assertEquals( 0x00, reg.getL() );
@@ -295,7 +295,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetHL()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setHL( 0 );
 		Assert.assertEquals( 0, reg.getHL() );
@@ -332,7 +332,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetIX()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setIX( 0x0000 );
 		Assert.assertEquals( 0x0000, reg.getIX() );
@@ -350,7 +350,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetIY()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setIY( 0x0000 );
 		Assert.assertEquals( 0x0000, reg.getIY() );
@@ -368,7 +368,7 @@ public class RegisterTest
 	@Test
 	public void testGetSetSP()
 	{
-		Registers reg = new Registers();
+		RegisterFile reg = new RegisterFile();
 		
 		reg.setSP( 0x0000 );
 		Assert.assertEquals( 0x0000, reg.getSP() );

@@ -1,42 +1,45 @@
-package vZ80.instruction.access;
+package vZ80.instruction.load;
 
+import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
+import vZ80.instruction.IInstruction;
+import vZ80.instruction.access.I16bitAccessor;
 
-public class C implements I8bitAccessor
+
+public class Pop implements IInstruction
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
 	//----------------------------------------------------------
+	private I16bitAccessor dst;
 
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
+	public Pop( I16bitAccessor dst )
 	{
-		
+		this.dst = dst;
 	}
 
 	//----------------------------------------------------------
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
 	@Override
-	public void set8( VirtualMachine vm, int data )
+	public void execute( VirtualMachine vm )
 	{
 		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
-	}
-
-	@Override
-	public int get8( VirtualMachine vm )
-	{
-		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		Memory ram = vm.getRam();
+		
+		int sp = reg.getSP();
+		int value = ram.read16( sp );
+		dst.set16( vm, value );
+		
+		reg.setSP( sp + 2 );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

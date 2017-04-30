@@ -1,9 +1,9 @@
 package vZ80.instruction.access;
 
-import vZ80.Registers;
+import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
 
-public class AF implements IDataSource, IDataDestination
+public class AF implements I16bitAccessor
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
@@ -26,16 +26,16 @@ public class AF implements IDataSource, IDataDestination
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
 	@Override
-	public void setData( VirtualMachine vm, int data )
+	public void set16( VirtualMachine vm, int data )
 	{
-		Registers reg = vm.getRegisters();
+		RegisterFile reg = vm.getRegisters();
 		reg.setAF( data );
 	}
 
 	@Override
-	public int getData( VirtualMachine vm )
+	public int get16( VirtualMachine vm )
 	{
-		Registers reg = vm.getRegisters();
+		RegisterFile reg = vm.getRegisters();
 		return reg.getAF();
 	}
 

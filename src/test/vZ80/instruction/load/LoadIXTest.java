@@ -1,14 +1,21 @@
-package vZ80.instruction.access;
+package vZ80.instruction.load;
 
+import org.junit.Assert;
+import org.junit.Test;
+
+import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
+import vZ80.instruction.IInstruction;
+import vZ80.instruction.access.IX;
+import vZ80.instruction.access.Pointer;
+import vZ80.instruction.load.Load16bit;
 
-public class C implements I8bitAccessor
+public class LoadIXTest
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
 	//----------------------------------------------------------
-	public static C instance = new C();
 
 	//----------------------------------------------------------
 	//                   INSTANCE VARIABLES
@@ -17,26 +24,40 @@ public class C implements I8bitAccessor
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
 	//----------------------------------------------------------
-	private C()
-	{
-		
-	}
 
 	//----------------------------------------------------------
 	//                    INSTANCE METHODS
 	//----------------------------------------------------------
-	@Override
-	public void set8( VirtualMachine vm, int data )
+	@Test
+	public void testLoadIX_Value()
 	{
+		VirtualMachine vm = new VirtualMachine();
 		RegisterFile reg = vm.getRegisters();
-		reg.setC( data );
+		
+		// Create and execute the load instruction
+		IInstruction load = new Load16bit( IX.instance, 0x0FF0 );
+		load.execute( vm );
+		
+		// The destination should now contain the source
+		Assert.assertEquals( 0x0FF0, reg.getIX() );
 	}
-
-	@Override
-	public int get8( VirtualMachine vm )
+	
+	@Test
+	public void testLoadIX_Pointer()
 	{
+		VirtualMachine vm = new VirtualMachine();
+		Memory ram = vm.getRam();
 		RegisterFile reg = vm.getRegisters();
-		return reg.getC();
+		
+		// Set a value at an arbitrary point in memory
+		ram.write16( 0x0FF0, 0x0AA0 );
+		
+		// Create and execute the load instruction
+		IInstruction load = new Load16bit( IX.instance, new Pointer(0x0FF0) );
+		load.execute( vm );
+		
+		// The destination should now contain the source
+		Assert.assertEquals( 0x0AA0, reg.getIX() );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////
