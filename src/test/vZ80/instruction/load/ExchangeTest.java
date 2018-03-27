@@ -72,7 +72,7 @@ public class ExchangeTest
 		RegisterFile reg = vm.getRegisters();
 		
 		// Set the stack pointer and write a value to it 
-		int baseSP = 0x0100;
+		int baseSP = 0x2000;
 		reg.setSP( baseSP );
 		ram.write16( baseSP, 0x0FF0 );
 		
@@ -96,7 +96,7 @@ public class ExchangeTest
 		RegisterFile reg = vm.getRegisters();
 		
 		// Set the stack pointer and write a value to it 
-		int baseSP = 0x0100;
+		int baseSP = 0x2000;
 		reg.setSP( baseSP );
 		ram.write16( baseSP, 0x0FF0 );
 		
@@ -120,7 +120,7 @@ public class ExchangeTest
 		RegisterFile reg = vm.getRegisters();
 		
 		// Set the stack pointer and write a value to it 
-		int baseSP = 0x0100;
+		int baseSP = 0x2000;
 		reg.setSP( baseSP );
 		ram.write16( baseSP, 0x0FF0 );
 		

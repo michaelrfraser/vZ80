@@ -25,32 +25,34 @@ public class Memory
 	//----------------------------------------------------------
 	public int read8( int address )
 	{
-		int wrappedAddress = address & 0xFFFF;		
+		int wrappedAddress = address & SIZE;
 		return memory[wrappedAddress] & 0xFF;
 	}
 	
 	public void write8( int address, int value )
 	{
-		int wrappedAddress = address & 0xFFFF;
+		int wrappedAddress = address & SIZE;
 		memory[wrappedAddress] = (byte)(value & 0xFF);
 	}
 	
 	public int read16( int address )
 	{
-		int wrappedHiAddress = address & 0xFFFF;
-		int wrappedLoAddress = (address + 1) & 0xFFFF;
+		int wrappedHiAddress = address & SIZE;
+		int wrappedLoAddress = (address + 1) & SIZE;
 		
 		return (memory[wrappedHiAddress] & 0xFF) << 8 | memory[wrappedLoAddress] & 0xFF;
 	}
 	
 	public void write16( int address, int value )
 	{
-		int wrappedHiAddress = address & 0xFFFF;
-		int wrappedLoAddress = (address + 1) & 0xFFFF;
+		int wrappedHiAddress = address & SIZE;
+		int wrappedLoAddress = (address + 1) & SIZE;
 		
 		memory[wrappedHiAddress] = (byte)((value & 0xFF00) >> 8);
 		memory[wrappedLoAddress] = (byte)(value & 0xFF);
 	}
+	
+	
 	
 	////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////// Accessor and Mutator Methods ///////////////////////////////

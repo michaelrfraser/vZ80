@@ -151,14 +151,14 @@ public class LoadPointerTest
 		RegisterFile reg = vm.getRegisters();
 		
 		// Load an initial value into the source
-		reg.setSP( 0x0AA0 );
+		reg.setSP( 0x2000 );
 		
 		// Create and execute the load instruction
 		IInstruction load = new Load16bit( new Pointer(0x0FF0), SP.instance );
 		load.execute( vm );
 		
 		// The destination should now contain the source
-		Assert.assertEquals( 0x0AA0, ram.read16(0x0FF0) );
+		Assert.assertEquals( 0x2000, ram.read16(0x0FF0) );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

@@ -219,17 +219,21 @@ public class RegisterFile
 	{
 		this.sp = (short)(sp & 0xFFFF);
 	}
-	/*
+	
 	public int getPc()
 	{
 		return pc;
 	}
 
+	public int getPcAndIncrement()
+	{
+		return pc++; 
+	}
+	
 	public void setPc( int pc )
 	{
-		this.pc = pc;
+		this.pc = (short)(pc & 0xFFFF);
 	}
-	*/
 	
 	////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////// Accessor and Mutator Methods ///////////////////////////////
