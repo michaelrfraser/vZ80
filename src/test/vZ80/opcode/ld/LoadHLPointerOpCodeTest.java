@@ -29,7 +29,7 @@ import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
 
-public class LoadAOpCodeTest
+public class LoadHLPointerOpCodeTest
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
@@ -80,8 +80,6 @@ public class LoadAOpCodeTest
 		this.memory.write8( 0xCAFE + 1, 'M' );       // (IX+1)
 		this.memory.write8( 0xBEEF + 1, 'F' );       // (IY+1)
 		
-		this.memory.write8( 0xBABE, 'J' );
-		
 	}
 
 	@After
@@ -96,10 +94,10 @@ public class LoadAOpCodeTest
 	/////////////////////////////// Accessor and Mutator Methods ///////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////
 	@Test
-	public void testLD_AA()
+	public void testLD_HLPointerA()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7F );
+		memory.write8( BASE_PC, 0x77 );
 		
 		// Execute
 		this.vm.tick();
@@ -107,15 +105,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value of A
-		Assert.assertEquals( 'A', this.registers.getA() );
+		// (HL) should contain the value of A
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'A', hlPointerVal );
 	}
 
 	@Test
-	public void testLD_AB()
+	public void testLD_HLPointerB()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x78 );
+		memory.write8( BASE_PC, 0x70 );
 		
 		// Execute
 		this.vm.tick();
@@ -123,15 +122,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value that was in B
-		Assert.assertEquals( 'B', this.registers.getA() );
+		// (HL) should contain the value that was in B
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'B', hlPointerVal );
 	}
 	
 	@Test
-	public void testLD_AC()
+	public void testLD_HLPointerC()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x79 );
+		memory.write8( BASE_PC, 0x71 );
 		
 		// Execute
 		this.vm.tick();
@@ -139,15 +139,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value that was in C
-		Assert.assertEquals( 'C', this.registers.getA() );
+		// (HL) should contain the value that was in C
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'C', hlPointerVal );
 	}
 	
 	@Test
-	public void testLD_AD()
+	public void testLD_HLPointerD()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7A );
+		memory.write8( BASE_PC, 0x72 );
 		
 		// Execute
 		this.vm.tick();
@@ -155,15 +156,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value that was in D
-		Assert.assertEquals( 'D', this.registers.getA() );
+		// (HL) should contain the value that was in D
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'D', hlPointerVal );
 	}
 	
 	@Test
-	public void testLD_AE()
+	public void testLD_HLPointerE()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7B );
+		memory.write8( BASE_PC, 0x73 );
 		
 		// Execute
 		this.vm.tick();
@@ -171,15 +173,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value that was in E
-		Assert.assertEquals( 'E', this.registers.getA() );
+		// (HL) should contain the value that was in E
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'E', hlPointerVal );
 	}
 	
 	@Test
-	public void testLD_AH()
+	public void testLD_HLPointerH()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7C );
+		memory.write8( BASE_PC, 0x74 );
 		
 		// Execute
 		this.vm.tick();
@@ -187,15 +190,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value that was in H
-		Assert.assertEquals( 'H', this.registers.getA() );
+		// (HL) should contain the value that was in H
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'H', hlPointerVal );
 	}
 	
 	@Test
-	public void testLD_AL()
+	public void testLD_HLPointerL()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( 0x00, 0x7D );
+		memory.write8( 0x00, 0x75 );
 		
 		// Execute
 		this.vm.tick();
@@ -203,116 +207,16 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 1
 		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
 		
-		// A should contain the value that was in L
-		Assert.assertEquals( 'L', this.registers.getA() );
+		// (HL) should contain the value that was in L
+		int hlPointerVal = this.memory.read8( 0x484C );
+		Assert.assertEquals( 'L', hlPointerVal );
 	}
 	
 	@Test
-	public void testLD_AHLPointer()
+	public void testLD_HLPointerByte()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7E );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that HL was pointing to
-		Assert.assertEquals( 'X', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_ABCPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x0A );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that BC was pointing to
-		Assert.assertEquals( 'Y', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_ADEPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x1A );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that BC was pointing to
-		Assert.assertEquals( 'Z', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AWordPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x3A );
-		memory.write16( BASE_PC + 1, 0xBABE );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 2
-		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
-		
-		// A should contain the value that was in the word param
-		Assert.assertEquals( 'J', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AIXPlusIndexPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0xDD );
-		memory.write8( BASE_PC + 1, 0x7E );
-		memory.write8( BASE_PC + 2, 0x01 );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 3
-		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
-		
-		// A should contain the value that was in the word param
-		Assert.assertEquals( 'M', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AIYPlusIndexPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0xFD );
-		memory.write8( BASE_PC + 1, 0x7E );
-		memory.write8( BASE_PC + 2, 0x01 );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 3
-		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
-		
-		// A should contain the value that was in the word param
-		Assert.assertEquals( 'F', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AByte()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x3E );
+		memory.write8( BASE_PC, 0x36 );
 		memory.write8( BASE_PC + 1, 'F' );
 		
 		// Execute
@@ -321,8 +225,10 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 2
 		Assert.assertEquals( BASE_PC + 2, this.registers.getPc() );
 		
-		// A should contain the value that was in the byte param
-		Assert.assertEquals( 'F', this.registers.getA() );
+		// (HL) should contain the value that was in the byte param
+		int hlAddr = this.registers.getHL();
+		int hlValue = this.memory.read8( hlAddr );
+		Assert.assertEquals( 'F', hlValue );
 	}
 	
 	//----------------------------------------------------------

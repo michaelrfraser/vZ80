@@ -29,7 +29,7 @@ import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
 
-public class LoadAOpCodeTest
+public class LoadIXPlusIndexPointerOpCodeTest
 {
 	//----------------------------------------------------------
 	//                    STATIC VARIABLES
@@ -80,8 +80,6 @@ public class LoadAOpCodeTest
 		this.memory.write8( 0xCAFE + 1, 'M' );       // (IX+1)
 		this.memory.write8( 0xBEEF + 1, 'F' );       // (IY+1)
 		
-		this.memory.write8( 0xBABE, 'J' );
-		
 	}
 
 	@After
@@ -96,188 +94,11 @@ public class LoadAOpCodeTest
 	/////////////////////////////// Accessor and Mutator Methods ///////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////
 	@Test
-	public void testLD_AA()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7F );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value of A
-		Assert.assertEquals( 'A', this.registers.getA() );
-	}
-
-	@Test
-	public void testLD_AB()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x78 );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that was in B
-		Assert.assertEquals( 'B', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AC()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x79 );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that was in C
-		Assert.assertEquals( 'C', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AD()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7A );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that was in D
-		Assert.assertEquals( 'D', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AE()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7B );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that was in E
-		Assert.assertEquals( 'E', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AH()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7C );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that was in H
-		Assert.assertEquals( 'H', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AL()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( 0x00, 0x7D );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that was in L
-		Assert.assertEquals( 'L', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AHLPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x7E );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that HL was pointing to
-		Assert.assertEquals( 'X', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_ABCPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x0A );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that BC was pointing to
-		Assert.assertEquals( 'Y', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_ADEPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x1A );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 1
-		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
-		
-		// A should contain the value that BC was pointing to
-		Assert.assertEquals( 'Z', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AWordPointer()
-	{
-		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x3A );
-		memory.write16( BASE_PC + 1, 0xBABE );
-		
-		// Execute
-		this.vm.tick();
-		
-		// PC should have incremented by 2
-		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
-		
-		// A should contain the value that was in the word param
-		Assert.assertEquals( 'J', this.registers.getA() );
-	}
-	
-	@Test
-	public void testLD_AIXPlusIndexPointer()
+	public void testLD_IXPlusIndexPointerA()
 	{
 		// Set the opcode as the first instruction in memory
 		memory.write8( BASE_PC, 0xDD );
-		memory.write8( BASE_PC + 1, 0x7E );
+		memory.write8( BASE_PC + 1, 0x77 );
 		memory.write8( BASE_PC + 2, 0x01 );
 		
 		// Execute
@@ -286,16 +107,17 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 3
 		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
 		
-		// A should contain the value that was in the word param
-		Assert.assertEquals( 'M', this.registers.getA() );
+		// (IX+1) should contain the value of A
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'A', ixPlusOnePointerVal );
 	}
-	
+
 	@Test
-	public void testLD_AIYPlusIndexPointer()
+	public void testLD_IXPlusIndexPointerB()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0xFD );
-		memory.write8( BASE_PC + 1, 0x7E );
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x70 );
 		memory.write8( BASE_PC + 2, 0x01 );
 		
 		// Execute
@@ -304,25 +126,124 @@ public class LoadAOpCodeTest
 		// PC should have incremented by 3
 		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
 		
-		// A should contain the value that was in the word param
-		Assert.assertEquals( 'F', this.registers.getA() );
+		// (IX+1) should contain the value that was in B
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'B', ixPlusOnePointerVal );
 	}
 	
 	@Test
-	public void testLD_AByte()
+	public void testLD_IXPlusIndexPointerC()
 	{
 		// Set the opcode as the first instruction in memory
-		memory.write8( BASE_PC, 0x3E );
-		memory.write8( BASE_PC + 1, 'F' );
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x71 );
+		memory.write8( BASE_PC + 2, 0x01 );
 		
 		// Execute
 		this.vm.tick();
 		
-		// PC should have incremented by 2
-		Assert.assertEquals( BASE_PC + 2, this.registers.getPc() );
+		// PC should have incremented by 3
+		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
 		
-		// A should contain the value that was in the byte param
-		Assert.assertEquals( 'F', this.registers.getA() );
+		// (IX+1) should contain the value that was in C
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'C', ixPlusOnePointerVal );
+	}
+	
+	@Test
+	public void testLD_IXPlusIndexPointerD()
+	{
+		// Set the opcode as the first instruction in memory
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x72 );
+		memory.write8( BASE_PC + 2, 0x01 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 3
+		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
+		
+		// (IX+1) should contain the value that was in D
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'D', ixPlusOnePointerVal );
+	}
+	
+	@Test
+	public void testLD_IXPlusIndexPointerE()
+	{
+		// Set the opcode as the first instruction in memory
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x73 );
+		memory.write8( BASE_PC + 2, 0x01 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 3
+		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
+		
+		// (IX+1) should contain the value that was in E
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'E', ixPlusOnePointerVal );
+	}
+	
+	@Test
+	public void testLD_IXPlusIndexPointerH()
+	{
+		// Set the opcode as the first instruction in memory
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x74 );
+		memory.write8( BASE_PC + 2, 0x01 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 3
+		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
+		
+		// (IX+1) should contain the value that was in H
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'H', ixPlusOnePointerVal );
+	}
+	
+	@Test
+	public void testLD_IXPlusIndexPointerL()
+	{
+		// Set the opcode as the first instruction in memory
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x75 );
+		memory.write8( BASE_PC + 2, 0x01 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 3
+		Assert.assertEquals( BASE_PC + 3, this.registers.getPc() );
+		
+		// (IX+1) should contain the value that was in L
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'L', ixPlusOnePointerVal );
+	}
+	
+	@Test
+	public void testLD_IXPlusIndexPointerByte()
+	{
+		// Set the opcode as the first instruction in memory
+		memory.write8( BASE_PC, 0xDD );
+		memory.write8( BASE_PC + 1, 0x36 );
+		memory.write8( BASE_PC + 2, 0x01 );
+		memory.write8( BASE_PC + 3, 'K' );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 4
+		Assert.assertEquals( BASE_PC + 4, this.registers.getPc() );
+		
+		// (IX+1) should contain the value that was in the byte param
+		int ixPlusOnePointerVal = this.memory.read8( 0xCAFE + 1 );
+		Assert.assertEquals( 'K', ixPlusOnePointerVal );
 	}
 	
 	//----------------------------------------------------------
