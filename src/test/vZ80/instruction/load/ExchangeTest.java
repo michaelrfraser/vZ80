@@ -9,6 +9,8 @@ import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
 import vZ80.instruction.IInstruction;
+import vZ80.instruction.access.AF;
+import vZ80.instruction.access.AFShadow;
 import vZ80.instruction.access.DE;
 import vZ80.instruction.access.HL;
 import vZ80.instruction.access.IX;
@@ -134,6 +136,50 @@ public class ExchangeTest
 		// Values should now be swapped
 		Assert.assertEquals( 0x0AA0, ram.read16(baseSP) );
 		Assert.assertEquals( 0x0FF0, reg.getIY() );
+	}
+	
+	@Test
+	public void testExchangeAFAFShadow()
+	{
+		VirtualMachine vm = new VirtualMachine();
+		RegisterFile reg = vm.getRegisters();
+		
+		reg.setAF( 0xCAFE );
+		reg.setAFShadow( 0xBEEF );
+		
+		// Create and execute the exchange instruction
+		IInstruction exchange = new Exchange( AF.instance, AFShadow.instance );
+		exchange.execute( vm );
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0xBEEF, reg.getAF() );
+		Assert.assertEquals( 0xCAFE, reg.getAFShadow() );
+	}
+	
+	@Test
+	public void testExchangeShadow()
+	{
+		VirtualMachine vm = new VirtualMachine();
+		RegisterFile reg = vm.getRegisters();
+		
+		reg.setBC( 0xCAFE );
+		reg.setBCShadow( 0xBEEF );
+		reg.setDE( 0xBABE );
+		reg.setDEShadow( 0x1337 );
+		reg.setHL( 0xF337 );
+		reg.setHLShadow( 0x600D );
+		
+		// Create and execute the exchange instruction
+		IInstruction exchange = new ExchangeShadow();
+		exchange.execute( vm );
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0xBEEF, reg.getBC() );
+		Assert.assertEquals( 0xCAFE, reg.getBCShadow() );
+		Assert.assertEquals( 0x1337, reg.getDE() );
+		Assert.assertEquals( 0xBABE, reg.getDEShadow() );
+		Assert.assertEquals( 0x600D, reg.getHL() );
+		Assert.assertEquals( 0xF337, reg.getHLShadow() );
 	}
 	
 	//----------------------------------------------------------

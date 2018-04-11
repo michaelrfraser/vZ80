@@ -112,7 +112,126 @@ public class ExOpCodeTest
 		Assert.assertEquals( 0x484C, registers.getDE() );
 		Assert.assertEquals( 0x4445, registers.getHL() );
 	}
+	
+	@Test
+	public void testEX_SPPointerHL()
+	{
+		// Write value to be swapped
+		this.registers.setSP( BASE_SP -2 );
+		this.memory.write16( BASE_SP - 2, 0xF00D );
+		
+		// Set the opcode as the first instruction in memory
+		this.memory.write8( BASE_PC, 0xE3 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 1
+		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0x484C, memory.read16(BASE_SP -2) );
+		Assert.assertEquals( 0xF00D, registers.getHL() );
+	}
 
+	@Test
+	public void testEX_SPPointerIX()
+	{
+		// Write value to be swapped
+		this.registers.setSP( BASE_SP -2 );
+		this.memory.write16( BASE_SP - 2, 0xF00D );
+		
+		// Set the opcode as the first instruction in memory
+		this.memory.write8( BASE_PC, 0xDD );
+		this.memory.write8( BASE_PC + 1, 0xE3 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 2
+		Assert.assertEquals( BASE_PC + 2, this.registers.getPc() );
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0xCAFE, memory.read16(BASE_SP -2) );
+		Assert.assertEquals( 0xF00D, registers.getIX() );
+	}
+	
+	@Test
+	public void testEX_SPPointerIY()
+	{
+		// Write value to be swapped
+		this.registers.setSP( BASE_SP -2 );
+		this.memory.write16( BASE_SP - 2, 0xF00D );
+		
+		// Set the opcode as the first instruction in memory
+		this.memory.write8( BASE_PC, 0xFD );
+		this.memory.write8( BASE_PC + 1, 0xE3 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 2
+		Assert.assertEquals( BASE_PC + 2, this.registers.getPc() );
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0xBEEF, memory.read16(BASE_SP -2) );
+		Assert.assertEquals( 0xF00D, registers.getIY() );
+	}
+	
+	@Test
+	public void testEX_AFAFShadow()
+	{
+		this.registers.setAF( 0xCAFE );
+		this.registers.setAFShadow( 0xBEEF );
+		
+		// Set the opcode as the first instruction in memory
+		this.memory.write8( BASE_PC, 0x08 );
+		this.memory.write8( BASE_PC + 1, 0x08 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// PC should have incremented by 1
+		Assert.assertEquals( BASE_PC + 1, this.registers.getPc() );
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0xBEEF, registers.getAF() );
+		Assert.assertEquals( 0xCAFE, registers.getAFShadow() );
+		
+		// Execute swap again
+		this.vm.tick();
+		
+		// PC should have incremented by 1 again
+		Assert.assertEquals( BASE_PC + 2, this.registers.getPc() );
+		
+		// Values should be back to their original form
+		Assert.assertEquals( 0xCAFE, registers.getAF() );
+		Assert.assertEquals( 0xBEEF, registers.getAFShadow() );
+	}
+	
+	@Test
+	public void testEXX()
+	{
+		// Set shadow register values
+		this.registers.setBCShadow( 0xBEEF );
+		this.registers.setDEShadow( 0x1337 );
+		this.registers.setHLShadow( 0x600D );
+		
+		// Set the opcode as the first instruction in memory
+		this.memory.write8( BASE_PC, 0xD9 );
+		
+		// Execute
+		this.vm.tick();
+		
+		// Values should now be swapped
+		Assert.assertEquals( 0xBEEF, registers.getBC() );
+		Assert.assertEquals( 0x4243, registers.getBCShadow() );
+		Assert.assertEquals( 0x1337, registers.getDE() );
+		Assert.assertEquals( 0x4445, registers.getDEShadow() );
+		Assert.assertEquals( 0x600D, registers.getHL() );
+		Assert.assertEquals( 0x484C, registers.getHLShadow() );
+	}
+	
 	//----------------------------------------------------------
 	//                     STATIC METHODS
 	//----------------------------------------------------------

@@ -4,6 +4,8 @@ import vZ80.Memory;
 import vZ80.RegisterFile;
 import vZ80.VirtualMachine;
 import vZ80.instruction.access.A;
+import vZ80.instruction.access.AF;
+import vZ80.instruction.access.AFShadow;
 import vZ80.instruction.access.B;
 import vZ80.instruction.access.BC;
 import vZ80.instruction.access.BCPointer;
@@ -22,7 +24,9 @@ import vZ80.instruction.access.IY;
 import vZ80.instruction.access.L;
 import vZ80.instruction.access.Pointer;
 import vZ80.instruction.access.SP;
+import vZ80.instruction.access.SPPointer;
 import vZ80.instruction.load.Exchange;
+import vZ80.instruction.load.ExchangeShadow;
 import vZ80.instruction.load.Load16bit;
 import vZ80.instruction.load.Load8bit;
 
@@ -156,13 +160,13 @@ public class InstructionDecoder
 		this.creators[0xF9] = loadCreator; // LD SP,HL 
 		
 		this.creators[0xEB] = exchangeCreator; // EX DE,HL
+		this.creators[0xE3] = exchangeCreator; // EX (SP),HL
+		this.creators[0x08] = exchangeCreator; // EX AF,AF'
+		this.creators[0xD9] = exchangeCreator; // EXX
 		
 		this.creators[0xDD] = indexCreator; // IX family
 		this.creators[0xFD] = indexCreator; // IY family
 		this.creators[0xED] = edFamilyCreator; // instructions starting with 0xED
-		
-		
-		
 	}
 	
 	public IInstruction fetchNext() throws IllegalArgumentException
@@ -423,6 +427,10 @@ public class InstructionDecoder
 			{
 				return new Load16bit( SP.instance, base );
 			}
+			else if( v1 == 0xE3 )
+			{
+				return new Exchange( SPPointer.instance, base );
+			}
 			// 8-bit IN+d load
 			else
 			{
@@ -500,6 +508,18 @@ public class InstructionDecoder
 			if( v1 == 0xEB )
 			{
 				return new Exchange( DE.instance, HL.instance );
+			}
+			else if( v1 == 0xE3 )
+			{
+				return new Exchange( SPPointer.instance, HL.instance );
+			}
+			else if( v1 == 0x08 )
+			{
+				return new Exchange( AF.instance, AFShadow.instance );
+			}
+			else if( v1 == 0xD9 )
+			{
+				return new ExchangeShadow();
 			}
 			else
 			{

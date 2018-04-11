@@ -33,6 +33,12 @@ public class RegisterFile
 	private short iy;
 	private short sp;
 	private short pc;
+
+	// Shadow Registers
+	private short afShadow;
+	private short bcShadow;
+	private short deShadow;
+	private short hlShadow;
 	
 	//----------------------------------------------------------
 	//                      CONSTRUCTORS
@@ -224,15 +230,50 @@ public class RegisterFile
 	{
 		return pc;
 	}
-
-	public int getPcAndIncrement()
-	{
-		return pc++; 
-	}
 	
 	public void setPc( int pc )
 	{
 		this.pc = (short)(pc & 0xFFFF);
+	}
+	
+	public int getAFShadow()
+	{
+		return this.afShadow & 0xFFFF;
+	}
+	
+	public void setAFShadow( int afShadow )
+	{
+		this.afShadow = (short)(afShadow & 0xFFFF);
+	}
+	
+	public int getBCShadow()
+	{
+		return this.bcShadow & 0xFFFF;
+	}
+	
+	public void setBCShadow( int bcShadow )
+	{
+		this.bcShadow = (short)(bcShadow & 0xFFFF);
+	}
+	
+	public int getDEShadow()
+	{
+		return this.deShadow & 0xFFFF;
+	}
+	
+	public void setDEShadow( int deShadow )
+	{
+		this.deShadow = (short)(deShadow & 0xFFFF);
+	}
+	
+	public int getHLShadow()
+	{
+		return this.hlShadow & 0xFFFF;
+	}
+	
+	public void setHLShadow( int hlShadow )
+	{
+		this.hlShadow = (short)(hlShadow & 0xFFFF);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////

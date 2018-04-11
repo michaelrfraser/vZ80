@@ -43,6 +43,20 @@ public class LoadBCTest
 	}
 	
 	@Test
+	public void testLoadBC_ValueLarge()
+	{
+		VirtualMachine vm = new VirtualMachine();
+		RegisterFile reg = vm.getRegisters();
+		
+		// Create and execute the load instruction
+		IInstruction load = new Load16bit( BC.instance, 0xBEEF );
+		load.execute( vm );
+		
+		// The destination should now contain the source
+		Assert.assertEquals( 0xBEEF, reg.getBC() );
+	}
+	
+	@Test
 	public void testLoadBC_Pointer()
 	{
 		VirtualMachine vm = new VirtualMachine();
