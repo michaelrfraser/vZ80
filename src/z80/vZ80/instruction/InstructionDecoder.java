@@ -25,6 +25,7 @@ import vZ80.instruction.access.L;
 import vZ80.instruction.access.Pointer;
 import vZ80.instruction.access.SP;
 import vZ80.instruction.access.SPPointer;
+import vZ80.instruction.arithmetic.Add8bit;
 import vZ80.instruction.load.Exchange;
 import vZ80.instruction.load.ExchangeShadow;
 import vZ80.instruction.load.Load16bit;
@@ -61,6 +62,7 @@ public class InstructionDecoder
 		IInstructionCreator indexCreator = new IndexFamilyCreator();
 		IInstructionCreator edFamilyCreator = new EDFamilyInstructionCreator();
 		IInstructionCreator exchangeCreator = new GenericExchangeCreator();
+		IInstructionCreator addCreator = new GenericAddCreator();
 		
 		// Creators registered as per order listed at
 		// http://nemesis.lonestar.org/computers/tandy/software/apps/m4/qd/opcodes.html
@@ -167,6 +169,8 @@ public class InstructionDecoder
 		this.creators[0xDD] = indexCreator; // IX family
 		this.creators[0xFD] = indexCreator; // IY family
 		this.creators[0xED] = edFamilyCreator; // instructions starting with 0xED
+		
+		this.creators[0x87] = addCreator; // ADD A,A
 	}
 	
 	public IInstruction fetchNext() throws IllegalArgumentException
@@ -503,23 +507,40 @@ public class InstructionDecoder
 		@Override
 		public IInstruction createAndIncrement( VirtualMachine vm )
 		{
-			int v1 = readDereferenceIncrementPc8bit();
+			int v0 = readDereferenceIncrementPc8bit();
 			
-			if( v1 == 0xEB )
+			if( v0 == 0xEB )
 			{
 				return new Exchange( DE.instance, HL.instance );
 			}
-			else if( v1 == 0xE3 )
+			else if( v0 == 0xE3 )
 			{
 				return new Exchange( SPPointer.instance, HL.instance );
 			}
-			else if( v1 == 0x08 )
+			else if( v0 == 0x08 )
 			{
 				return new Exchange( AF.instance, AFShadow.instance );
 			}
-			else if( v1 == 0xD9 )
+			else if( v0 == 0xD9 )
 			{
 				return new ExchangeShadow();
+			}
+			else
+			{
+				throw new IllegalArgumentException();
+			}
+		}
+	}
+	
+	private class GenericAddCreator implements IInstructionCreator
+	{
+		@Override
+		public IInstruction createAndIncrement( VirtualMachine vm )
+		{
+			int v0 = readDereferenceIncrementPc8bit();
+			if( v0 == 0x87 )
+			{
+				return new Add8bit( A.instance );
 			}
 			else
 			{
