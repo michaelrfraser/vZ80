@@ -59,22 +59,26 @@ public class Add8bit implements IInstruction
 		int operandValue = operand.get8( vm );
 		int newValue = a + operandValue;
 		
-		// Carry Flag
-		if( newValue > 255 )
+		// C (Carry) 
+		if( newValue > 0xFF )
 			flags |= 0x01;
 		
-		// Add/Subtract Flag (always 0)
+		// N (Add/Subtract)
 		
-		// Overflow
+		// P/V (Overflow)
 		if( newValue > 127 || newValue < -127 )
 			flags |= 0x04;
 		
-		// Zero Flag
+		// H (Half Carry)
+		if( ((a & 0x0F) + (a  & 0x0F)) > 0x0F )
+			flags |= 0x10;
+		
+		// Z (Zero)
 		if( (newValue & 0xFF) == 0 )
 			flags |= 0x40;
 		
-		// Negative Flag
-		if( (newValue & 0x80) != 0 )
+		// S (Sign)
+		if( (newValue & 0x80) == 1 )
 			flags |= 0x80;
 		
 		reg.setF( flags );

@@ -55,14 +55,14 @@ public class Add8bitTest
 		RegisterFile reg = vm.getRegisters();
 		
 		// Set initial value for A
-		reg.setA( 0x30 );
+		reg.setA( 0x01 );
 		
 		// Create and execute the add instruction
 		IInstruction add = new Add8bit( A.instance );
 		add.execute( vm );
 		
 		// A should now equal A + Operand
-		Assert.assertEquals( 0x60, reg.getA() );
+		Assert.assertEquals( 0x02, reg.getA() );
 		
 		int flags = reg.getF();
 		
@@ -80,7 +80,43 @@ public class Add8bitTest
 		// Zero flag should be 0
 		Assert.assertTrue( (flags & 0x40) == 0 );
 		
-		// Negative flag should be 0
+		// Sign flag should be 0
+		Assert.assertTrue( (flags & 0x80) == 0 );
+	}
+	
+	@Test
+	public void testAddA_A_Zero()
+	{
+		VirtualMachine vm = new VirtualMachine();
+		RegisterFile reg = vm.getRegisters();
+		
+		// Set initial value for A
+		reg.setA( 0x00 );
+		
+		// Create and execute the add instruction
+		IInstruction add = new Add8bit( A.instance );
+		add.execute( vm );
+		
+		// A should now equal A + Operand
+		Assert.assertEquals( 0x00, reg.getA() );
+		
+		int flags = reg.getF();
+		
+		// Carry flag should be 0
+		Assert.assertTrue( (flags & 0x01) == 0 );
+		
+		// Add/Subtract flag should be 0
+		Assert.assertTrue( (flags & 0x02) == 0 );
+		
+		// Overflow flag should be 0
+		Assert.assertTrue( (flags & 0x04) == 0 );
+		
+		// Half Carry?
+		
+		// Zero flag should be 1
+		Assert.assertTrue( (flags & 0x40) != 0 );
+		
+		// Sign flag should be 0
 		Assert.assertTrue( (flags & 0x80) == 0 );
 	}
 	
@@ -116,8 +152,8 @@ public class Add8bitTest
 		// Zero flag should be 0
 		Assert.assertTrue( (flags & 0x40) == 0 );
 		
-		// Negative flag should be 1
-		Assert.assertTrue( (flags & 0x80) != 0 );
+		// Sign flag should be 0
+		Assert.assertTrue( (flags & 0x80) == 0 );
 	}
 	
 	@Test
